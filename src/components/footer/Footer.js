@@ -4,40 +4,40 @@ import { Link } from 'react-router-dom';
 function Footer() {
     return (
         <div className="footer">
-            <div className="footer-container">
+            {/* <div className="footer-container">
                 <div className="footer-link">
                     <div className="link-items">
-                        <h3>About Us</h3>
-                        <Link to='/' className="link">Name</Link>
-                        <Link to='/' className="link">gmail</Link>
-                        <Link to='/' className="link">071-57488349</Link>
-                        <Link to='/' className="link">077-68594984</Link>
+                        <h3>About ArugMint</h3>
+                        <p>ArugMint is an AI-powered text-to-image generation platform created as a Final Year Project. It combines cutting-edge AI technology with intuitive design.</p>
                     </div>
                     <div className="link-items">
                         <h3>Quick Links</h3>
                         <Link to='/' className="link">Home</Link>
-                        <Link to='/' className="link">Privacy Policy</Link>
-                        <Link to='/' className="link">T&C</Link>
-                        <Link to='/' className="link">FAQs</Link>
+                        <Link to='/' className="link">Features</Link>
+                        <Link to='/' className="link">Architecture</Link>
+                        <Link to='/' className="link">Contact</Link>
                     </div>
-                </div>  {/* footer-link */}
+                </div>
                 <div className="footer-link">
                     <div className="link-items">
+                        <h3>Connect With Us</h3>
+                        <p><strong>Email:</strong> contact@arugmint.com</p>
+                        <p><strong>GitHub:</strong> github.com/arugmint</p>
+                        <p><strong>Portfolio:</strong> yourportfolio.com</p>
+                    </div>
+                    <div className="link-items">
                         <h3>Follow Us</h3>
-                        <Link to='https://www.facebook.com/' target='_blank' className="link">Facebook</Link>
-                        <Link to='https://www.instagram.com/' target='_blank'  className="link">Instagram</Link>
-                        <Link to='https://twitter.com/?lang=en' target='_blank' className="link">Twitter</Link>
-                        <Link to='https://www.youtube.com/' target='_blank' className="link">You Tube</Link>
+                        <Link to='https://www.linkedin.com/' target='_blank' className="link">LinkedIn</Link>
+                        <Link to='https://www.twitter.com/' target='_blank' className="link">Twitter</Link>
+                        <Link to='https://www.github.com/' target='_blank' className="link">GitHub</Link>
+                        <Link to='/' className="link">Demo</Link>
                     </div>
-                    <div className="footer-logo link-items">
-                        <img 
-                        src="image/logo.png" 
-                        alt="image" 
-                        className="logo" />
-                    </div>
-                </div>  {/* footer-link */}
-            </div>  {/* footer-container */}
-        </div>  /* footer */
+                </div>
+            </div> */}
+            <div className="footer-bottom">
+                <p>&copy; 2026 ArugMint: Picture the Point. Final Year Project. All rights reserved.</p>
+            </div>
+        </div>
     );
 }
 

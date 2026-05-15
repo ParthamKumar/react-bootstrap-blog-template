@@ -1,0 +1,20 @@
+/* Home Page Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Smooth transitions between sections */
+div > div {
+    transition: all 0.3s ease;
+}
+
+/* Global section styling */
+[class*="-section"] {
+    scroll-margin-top: 80px;
+}
