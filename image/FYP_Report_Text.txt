@@ -1,0 +1,425 @@
+
+
+
+
+ArguMint: Picture the Point
+
+PROJECT SUPERVISOR
+Mr Zain Ul Hassan
+PROJECT CO-SUPERVISOR
+Mr Nouman Durrani
+
+
+PROJECT TEAM
+22k-4004
+22k-4080
+22k-4079
+Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Computer Science.
+
+
+FAST SCHOOL OF COMPUTING
+NATIONAL UNIVERSITY OF COMPUTER AND EMERGING SCIENCES KARACHI CAMPUS
+Spring 2026
+
+
+
+
+
+
+
+Mr. Zain Ul Hassan
+
+Supervisor
+
+
+Mr. Nouman Durrani	
+
+
+Co-Supervisor
+
+
+
+
+
+
+FAST SCHOOL OF COMPUTING
+NATIONAL UNIVERSITY OF COMPUTER AND EMERGING SCIENCES KARACHI CAMPUS
+This page is intentionally left blank.
+Abstract
+
+Write the abstract of your project here. You are required to approve the content from supervisor.
+
+
+
+Introduction:
+1.1 Purpose of Document 
+This progress report provides a detailed overview of our final year project (ArguMint: Picture the Point). Moreover, it gives a complete description of the entire work we have done during our FYP-I and FYP-II period. 
+1.2 Intended Audience 
+The audience of this document is the jury since the project is being presented to them and our supervisors as this project is being implemented under their guidance. The current and future developers working on the ongoing and upcoming challenges of Image CLEF community in the same domain are also the intended readers.
+1.3 Project Overview
+The project, titled “ArguMint: Picture the Point”, represents an interdisciplinary effort to bridge the gap between formal logic and visual cognitive processing. At its core, the project is a response to the evolving nature of digital discourse, where the sheer volume of information often necessitates a more immediate and impactful form of communication than text alone can provide. Images have historically served as a potent medium for expressing deep-seated meaning and facilitating rapid comprehension in ways that bypass the cognitive load associated with dense textual analysis. In contrast, arguments are traditionally viewed as strictly structured and logical frameworks, often perceived as dry or inaccessible to the general public. 
+The genesis of this research is rooted in the Touché 2025 shared task at CLEF (Conference and Labs of the Evaluation Forum). This international campaign seeks to investigate a fundamental question in human-computer interaction: how can imagery effectively represent the essential elements of an argument to enhance its clarity, resonance, and ultimate influence. While a full academic argument typically consists of a central claim substantiated by a series of supporting premises or evidence, Our initiative focuses on a more modern, streamlined form of rhetoric. In our research, arguments are treated as succinct statements, featuring only a single, potent claim devoid of traditional supporting premises. This simplification mirrors the "soundbite" culture of modern social media and digital journalism, where a single sentence must carry the full weight of a position. 
+The specific technical mandate of this project is to develop an AI system that, given such a succinct argument, can either retrieve or generate high-fidelity images that assist in conveying the central aspects of that claim. Our team has pivoted toward a generative approach, leveraging the latest advancements in diffusion models. By fine-tuning Stable Diffusion 3.5 Medium, a state-of-the-art 2-billion parameter text-to-image model, we aim to go beyond simple keyword-to-image matching. Our goal is to create a system that understands the sentiment and intent behind an argument, producing visuals that act as a "visual premise" for the textual claim. 
+By participating in the Touché 2025 evaluation campaign, “ArguMint” seeks not only to provide a technical solution to image generation but also to contribute to the broader understanding of how humans perceive and validate arguments in a multimodal digital environment. The project encompasses the entire lifecycle of an AI product: from complex semantic data wrangling and high-performance GPU training on an NVIDIA RTX 4090 to the deployment of a full-stack web application designed for real-time user interaction.
+1.4 Problem Statement
+The fundamental problem addressed by Argu Mint: Picture the Point is the generation of contextually relevant images from textual arguments that consist of single claims without supporting premises. Unlike traditional text-to-image generation tasks where input prompts describe visual scenes explicitly, argument illustration requires the system to: 
+Infer arguments such as "Celebrity culture distorts personal values" or "Urban noise pollution damages mental calm" which do not directly describe visual content. The system must infer appropriate visual representations from abstract concepts. 
+According to the Touché 2025 evaluation criteria, generated images must represent the central aspects of an argument's claim. Each argument has two identified key aspects that should be visually conveyed. 
+The produced image should faithfully represent the position and implications of the argument, rather than simply illustrating associated but peripheral ideas.
+1.5 Technical Challenges
+1.5.1 Domain Gap Between Descriptive and Argumentative Text 
+Existing T2I models are predominantly trained on descriptive image captions from datasets like MS-COCO, LAION, and similar corpora. These captions describe what is visible in an image (e.g., "A dog running in a park"). Argumentative text, however, expresses opinions, claims, and value judgments that do not directly map to visual elements. This domain mismatch results in poor performance when state-of-the-art models are applied directly to argument illustration without fine-tuning. 
+1.5.2 Semantic Alignment with Abstract Concepts 
+Large-scale T2I models frequently struggle with attribute binding and compositional understanding [8][17]. For argument illustration, the challenge is amplified because: 
+Claims often involve abstract concepts ("values," "well-being," "mental calm") 
+The visual metaphors required are not explicitly stated 
+Multiple valid interpretations may exist for a single argument 
+1.5.3 Evaluation Complexity 
+Unlike standard image generation tasks evaluated through automated metrics (FID, CLIP Score), argument illustration requires assessment of whether generated images effectively convey the argument's key aspects. The Touché challenge employs manual evaluation using NDCG (Normalized Discounted Cumulative Gain) based on human judgment of aspect representation, making optimization and validation more complex. 
+1.5.4 Quality-Alignment Trade-off 
+Research has demonstrated that fine-tuning models for improved semantic alignment using human feedback can significantly reduce image quality, producing oversaturated or non-photorealistic outputs [10]. For argument illustration, both aspects are critical, images must be visually compelling while accurately representing the claim. 
+1.5.5 Limited Training Data 
+The CLEF argument-image dataset provides a relatively small corpus compared to the billions of image-text pairs used to train foundation models. Effective fine-tuning with limited domain-specific data while preventing overfitting and maintaining generalization is a significant challenge.
+1.6 Research Objectives
+The primary aim of this research is to architect and evaluate a robust, end-to-end pipeline capable of translating complex, often abstract, textual argument claims into contextually and aesthetically resonant images. To achieve this, the project is structured around several core technical and academic objectives that span the domains of Natural Language Processing (NLP), Computer Vision, and Full-Stack Engineering. 
+1.6.1 Optimization of Parameter-Efficient Fine-Tuning (PEFT)
+A central objective of this study is to implement and optimize a fine-tuning strategy for a state-of-the-art text-to-image diffusion model—specifically Stable Diffusion 3.5 Medium. Rather than attempting a full-parameter update, which is computationally prohibitive, we utilize Low-Rank Adaptation (LoRA) to inject argument-specific knowledge into the model's transformer layers. The objective is to determine the ideal rank and alpha configurations that allow the model to learn the nuances of "argumentative context" without suffering from catastrophic forgetting of its base generative capabilities. 
+1.6.2 Developing a Resource-Constrained Training Pipeline
+Given the disparate hardware environment available, ranging from a consumer-grade RTX 4050 with 6GB VRAM to a high-end RTX 4090 with 24GB VRAM, a key research objective is the development of a memory-efficient training architecture. We seek to evaluate the efficacy of deep-learning optimization techniques, such as 8-bit quantization for large text encoders (T5-XXL), gradient checkpointing, and mixed-precision (BFloat16) training. The goal is to prove that high-fidelity generative results can be achieved on consumer-accessible hardware, effectively democratizing the use of large-scale diffusion models for niche research tasks. 
+1.6.3 Enhancing Semantic Data Alignment
+A significant portion of this project is dedicated to the objective of "Semantic Data Wrangling." Because standard image-caption pairs often lack argumentative depth, we aim to develop a preprocessing pipeline that semantically matches images to arguments using GTE-Large sentence transformers. By generating 1024-dimensional embeddings and applying cosine similarity thresholds (specifically a threshold of 0.25), we objective to create a "Golden Dataset" where every training pair is mathematically and contextually relevant to the 128 arguments provided by the CLEF Touché task.
+1.7 Motivation and Challenges
+The development of ArguMint was not merely a linear execution of a pre-defined plan but rather an iterative journey marked by significant technical pivots, logistical hurdles, and profound "breakthrough" moments. While the project successfully met the requirements of the Touché 2025 task, the motivation behind our specific implementation choices was deeply rooted in overcoming real-world constraints that are often glossed over in purely theoretical research.
+1.7.1 The Computational VRAM Limit and the Strategic Pivot
+One of the primary motivations for our research was to explore the limits of modern Diffusion Transformers (DiT) under strict hardware constraints. Initially, our team held the high-level ambition of employing Stable Diffusion 3.5 Large to ensure the highest possible generative fidelity. However, the early stages of development presented a stark reality: the "Large" model was computationally prohibitive for our available hardware. Balancing development on an NVIDIA RTX 4050 (6GB VRAM) and heavy training on an RTX 4090 (24GB VRAM), we realized that the “Large” variant exceeded our VRAM overhead for a stable, high-resolution training pipeline. 
+This led to a critical, surgical pivot toward Stable Diffusion 3.5 Medium. This 2-billion parameter model offered an ideal equilibrium, providing enough complexity to understand argumentative nuance while remaining within the 24GB memory limit required for efficient LoRA fine-tuning. This challenge forced us to prioritize optimization over raw scale, leading to the implementation of 8-bit quantization for the T5-XXL text encoder and gradient checkpointing—techniques that ultimately defined the technical rigor of our project. 
+1.7.2 The "Data Wrangling" Ordeal
+Another significant motivation was the desire to move beyond generic datasets and tackle the specific problem of "Argument-to-Image" semantic alignment. The official CLEF dataset provided a rich collection of images, but we quickly discovered that a model is only as robust as the data it consumes. The raw data was often "noisy," containing images that were semantically detached from the core arguments or technically unsuitable (e.g., corrupt files or irrelevant metadata). 
+We undertook an extensive data-clearing and preprocessing ordeal, which involved extracting 128 distinctive arguments and matching them to over 14,000 images using GTE-Large semantic embeddings. Setting a strict cosine similarity threshold of 0.25 was a calculated risk; it ensured that the model learned only high-quality visual-textual mappings, effectively "teaching" the AI the difference between a generic picture and a visual argument. Spot-checking these thousands of matches for quality was a labor-intensive but necessary component of our methodology. 
+1.7.3 The Breakthrough: From Pixels to Persuasion
+The most powerful motivation during the grueling 300-hour training cycle was the anticipation of the first high-resolution outputs. Fine-tuning is often a "black box" process where the researcher waits for convergence, and for ArguMint, the "aha!" moment came during our transition from 256×256 to 512×512 resolution. 
+Seeing the model successfully translate an abstract claim, such as the environmental impact of forest destruction, into a contextually resonant image was a validation of our entire research approach. While the model still faces challenges with certain complex details like facial features, the realization that it could successfully learn to generate images that serve as a "visual premise" for a textual claim was the definitive success of the FYP-I phase. This shift from technical struggle to successful visualization remains the core inspiration for the ongoing refinements in our FYP-II cycle.
+1.8 Project Scope
+The operational scope of the ArguMint project was precisely defined to align with the requirements of the Touché 2025 shared task at CLEF. This project focused on the development of a generative AI pipeline capable of producing images that semantically align with textual argument claims. However, the research was conducted within specific boundaries regarding datasets, model architectures, and hardware capabilities. 
+1.8.1 Computational and Hardware Constraints
+The most significant constraint encountered during the development of ArguMint was the limit of available hardware. The project relied on an NVIDIA RTX 4050 with 6GB VRAM for early-stage development and an NVIDIA RTX 4090 with 24GB VRAM for high-intensity model training. While the team initially intended to utilize Stable Diffusion 3.5 Large for its superior generative capabilities, these hardware limitations made training the "Large" variant computationally prohibitive. 
+Consequently, a critical pivot was made to Stable Diffusion 3.5 Medium, a 2-billion parameter model that offered an optimal balance between visual quality and VRAM demands. To further optimize the pipeline for these hardware limits, we implemented 8-bit quantization for the T5-XXL text encoder, gradient checkpointing, and mixed-precision (BFloat16) training. 
+1.8.2 Dataset and Argument Scope
+The research was strictly bounded by the official CLEF 2025 Touché dataset. The primary focus was on a set of 128 distinctive arguments provided in XML format. Each argument within this scope consisted of a unique ID, a specific topic, and a succinct claim statement. 
+While the broader dataset contained approximately 32,000 images, the training scope was narrowed to a curated subset of 14,000 training samples selected through semantic alignment. Furthermore, the project focused exclusively on the claims of the arguments, excluding traditional supporting premises, to mirror the requirements of the shared task. 
+1.8.3 Methodological and Technical Scope
+Technically, the project was restricted to Low-Rank Adaptation (LoRA) fine-tuning of the MMDiT Transformer architecture within the Stable Diffusion 3.5 framework. The training followed a progressive resolution strategy, beginning at 256×256 pixels for rapid iteration and concluding at a final resolution of 512×512 pixels for high-quality validation. 
+The evaluation scope was limited to three primary quantitative metrics, Training scores, CLIP scores, and a manual human evaluation to calculate the NDCG@5. It is important to note that the official NDCG@5 scores, which depend on human evaluators from the CLEF community, remain pending and will serve as the final validation of the project’s performance in the 2025 campaign.
+Related Work
+2.1 Background and Justification 
+2.1.1 Evolution of Text-to-Image Generation 
+The field of text-to-image generation has witnessed remarkable progress over the past decade, transitioning from domain-specific generative adversarial networks (GANs) to general-purpose transformer and diffusion-based models. Early approaches such as StackGAN and AttnGAN demonstrated the feasibility of generating images from text but were constrained to narrow domains and suffered from artifacts and limited resolution [1][2]. 
+The introduction of DALL-E by OpenAI in 2021 marked a paradigm shift, demonstrating that scaling transformer architectures to 12 billion parameters and training on 250 million image-text pairs could achieve impressive zero-shot generation capabilities [3]. This was followed by significant advances in latent diffusion models (LDMs), which reduced computational requirements by operating in compressed latent spaces rather than pixel space [4]. 
+Current state-of-the-art models including Stable Diffusion 3.5, PixArt-Σ, and HiDream have pushed the boundaries of resolution, prompt adherence, and generation efficiency [5][6][7]. However, these models are primarily trained on descriptive image captions rather than abstract argumentative text, creating a significant domain gap for argument illustration tasks. 
+2.1.2 The Argument Illustration Challenge 
+The Touché 2025 shared task on "Image Retrieval/Generation for Arguments" at CLEF (Conference and Labs of the Evaluation Forum) presents a novel challenge: given an argument consisting of a single claim without supporting premises, systems must find or generate images that help convey central aspects of the argument's claim. This task 
+bridges computational argumentation and visual communication, areas that have traditionally been studied in isolation. 
+In contrast to traditional text-to-image generation, which typically involves prompts that depict specific visual scenarios (for instance, "a sunset over mountains"), argument illustration necessitates the interpretation of abstract assertions such as "Excessive homework diminishes student well-being" or "Energy drinks interfere with natural sleep patterns" and their conversion into significant visual depictions. The difficulty resides in encapsulating the core of an argument through the imagery produced. 
+2.1.3 Project Justification 
+Argu Mint: Picture the Point addresses this research gap by developing a specialized text-to-image generation system fine-tuned for argument illustration. Our approach builds upon Stable Diffusion 3.5 Medium, leveraging its advanced architecture while adapting it for the unique requirements of argumentative text: 
+Training on 14,000 argument-image pairs from the CLEF dataset to bridge the gap between argumentative language and visual representation. 
+Utilizing the SD3 triple text encoder architecture (dual CLIP and T5 encoders) for comprehensive interpretation of abstract claims. 
+Employing classifier-free guidance and flow matching scheduling to generate images that capture key aspects identified in the evaluation criteria. 
+The practical applications of this research extend to educational technology (visualizing debate topics), journalism (illustrating opinion pieces), legal documentation (representing case arguments), and persuasive communication design.
+2.2 Foundational Autoregressive Approaches 
+This section provides a comprehensive review of the literature on text-to-image generation, organized thematically to trace the evolution of architectures, methodologies, and capabilities. 
+2.2.1 Zero-Shot Text-to-Image Generation (DALL-E) 
+Ramesh et al. [3] introduced DALL-E, a groundbreaking two-stage approach for zero-shot text-to-image generation. The architecture employs a discrete variational autoencoder (dVAE) to compress 256×256 RGB images into 32×32 grids of image tokens, followed by a 12-billion parameter autoregressive transformer that models the joint distribution of text and image tokens. Trained on 250 million image-text pairs collected from the internet, DALL-E demonstrated remarkable generalization capabilities, generating high-quality images on datasets like MS-COCO without task-specific training. 
+The model's key innovation lies in treating text-to-image generation as a sequence modeling problem, enabling the application of transformer architectures that had proven successful in natural language processing. The reranking strategy, which selects the best image from 32 generated samples using CLIP, further improved output quality. However, the initial tokenization process can lose high-frequency details, and the model exhibits inconsistent performance on compositional tasks such as combining novel concepts (e.g., "a hedgehog wearing a Christmas sweater"). 
+2.2.2 CogView: Transformer-Based Generation 
+Ding et al. [12] presented CogView, a 4-billion parameter transformer model utilizing a Vector Quantized Variational Autoencoder (VQ-VAE) tokenizer. The model demonstrated scalability and flexibility in fine-tuning for various downstream tasks. However, the autoregressive generation process results in slower inference compared to diffusion-based alternatives, and the initial 256×256 resolution images are compressed to 32×32 tokens, potentially causing blurriness. The training on 30 million Chinese text-image pairs also introduced language and cultural biases in the generated content. 
+2.2.3 Parti: Pathways Autoregressive Text-to-Image 
+Yu et al. [11] developed Parti, which conceptualizes image generation as a translation task from text tokens to image tokens. The model excels at content-rich, complex image generation with strong prompt alignment and features a modular architecture facilitating component-wise improvements. However, the autoregressive bottleneck results in slow generation, and the model requires substantial computational resources (TPUv4 clusters), limiting accessibility for research and practical applications. 
+2.3 Diffusion-Based Architectures 
+2.3.1 Latent Diffusion Models (Stable Diffusion) 
+Rombach et al. [4] introduced Latent Diffusion Models (LDMs), representing a significant advance in computational efficiency for diffusion-based generation. The two-stage approach first trains a VAE to compress images into a lower-dimensional latent space, then applies the diffusion process in this efficient representation. A cross-attention mechanism enables flexible conditioning on text prompts, bounding boxes, or other modalities. 
+LDMs achieved state-of-the-art results on image inpainting and class-conditional synthesis while dramatically reducing training and inference costs. The approach allows the computationally expensive autoencoder to be trained once and reused across multiple diffusion model configurations. However, the compression into latent space can result in loss of fine-grained details, and performance is sensitive to the downsampling factor employed. 
+2.3.2 GLIDE: Text-Guided Diffusion Models 
+Nichol et al. [13] presented GLIDE, comparing CLIP guidance and classifier-free guidance for text-conditioned diffusion. The study found that classifier-free guidance produces more photorealistic and caption-aligned images. Despite being smaller than DALL-E, GLIDE achieved superior image quality and demonstrated strong generalization to complex prompts. The primary limitation is slower inference compared to GAN-based approaches, and the lack of publicly available code has limited community adoption and fine-tuning research. 
+2.3.3 Hierarchical Text-Conditional Generation (unCLIP/DALL-E 2) 
+Ramesh et al. [8] introduced unCLIP, a two-stage model that first generates CLIP image embeddings from text using an autoregressive prior, then decodes these embeddings into images using a diffusion decoder. The approach achieves improved image diversity compared to systems like GLIDE, with an impressive FID score of 10.39. The CLIP embedding space enables zero-shot semantic modification of images based on text descriptions. 
+However, the model struggles with attribute binding—associating specific attributes with distinct objects—and cannot reliably generate correctly spelled text within images. The decoder's reliance on 64×64 base resolution limits detail in complex scenes, suggesting avenues for future improvement. 
+2.4 Diffusion Transformers and Recent Advances 
+2.4.1 PixArt-Σ: Weak-to-Strong Training 
+Chen et al. [5] developed PixArt-Σ, a Diffusion Transformer (DiT) capable of directly generating 4K resolution images. The model employs a weak-to-strong training strategy, leveraging pretrained PixArt-α weights for efficient training on higher-quality data. An efficient token compression framework enables high-resolution synthesis while maintaining a relatively small parameter count of 0.6 billion—considerably smaller than models like SDXL. 
+PixArt-Σ excels at following complex, long text prompts through improved captioning using Share Captioner 
+instead of LLAVA. Despite these advances, the model still struggles with text generation within images and hand/face rendering. Future research directions include enhanced prompt handling, improved face generation, and security considerations for bias mitigation. 
+2.4.2 HiDream-I1: Sparse Diffusion Transformer 
+Cai et al. [7] introduced HiDream-I1-Fast, a lightweight variant of a 17-billion parameter sparse diffusion transformer utilizing Mixture-of-Experts (MoE) for efficient generation. The model is optimized for speed and reduced hardware requirements, enabling high-quality synthesis on single-GPU setups while supporting instruction-based image editing through HiDream-E1. 
+The open-source availability of weights and code facilitates adaptation and research. However, the fast variant exhibits slightly lower fidelity compared to full versions, and integration of editing pipelines requires careful setup. The architecture presents opportunities for fine-tuning on specialized tasks such as argument-to-image mapping. 
+2.4.3 MMaDA: Multimodal Diffusion Language Models 
+Yang et al. [14] presented MMaDA, a unified 8-billion parameter diffusion architecture designed for text-to-image generation, multimodal understanding, and textual reasoning. The model employs a modality-agnostic diffusion framework with chain-of-thought fine-tuning and a unified reinforcement learning objective (UniGRPO). 
+MMaDA outperforms strong baselines including SDXL and Janus on text-to-image benchmarks while maintaining open-source accessibility. The unified architecture may require careful tuning for purely image-focused tasks, but presents potential for adaptation to argument illustration applications requiring integrated reasoning and generation capabilities. 
+2.5 Controllability and Grounding Approaches 
+2.5.1 Visual Programming for Generation and Evaluation 
+Cho et al. [15] introduced VPGEN and VPEVAL, frameworks utilizing visual programming for T2I generation and evaluation. VPGEN implements a three-step process: an LLM generates objects and counts, creates layouts with bounding boxes, and guides a T2I model for final image generation. VPEVAL employs an LLM to generate evaluation programs calling specialized visual modules for scoring and explanation. 
+These frameworks provide superior control over object counts, spatial relationships, and scales while offering enhanced interpretability through step-by-step generation. The LLM-based approach handles unseen objects beyond training distributions. However, the multi-step pipeline introduces complexity and potential failure points, and output quality depends on underlying layout-to-image model performance. 
+2.5.2 ObjectDiffusion: Grounded Generation 
+Süleyman and Biricik [9] developed ObjectDiffusion, grounding T2I diffusion models through explicit layout inputs. Users control object placement and appearance via bounding boxes and object names alongside text prompts. The model achieves high-precision control over spatial relationships and supports open-vocabulary generation, outperforming existing models on controllable generation metrics. 
+The approach addresses critical controllability requirements for practical applications but requires additional user inputs, increasing workflow complexity compared to zero-shot models. The two-stage architecture adds computational overhead but enables the precise control necessary for structured image synthesis. 
+2.6 Personalization and Alignment 
+2.6.1 Imagine Yourself: Tuning-Free Personalization 
+The Meta GenAI team [16] introduced Imagine Yourself, a tuning-free personalization framework for diffusion-based generation. The approach achieves better prompt alignment for complex instructions without requiring model fine-tuning for individual subjects. However, performance on complex poses and unusual prompt combinations remains imperfect. The framework primarily addresses human subjects, with extension to non-human subjects (pets, art styles, objects, fictional characters) remaining underexplored. 
+2.7 Aligning Models with Human Feedback 
+Lee and Liu [10] developed a three-stage fine-tuning method using human feedback to enhance text-to-image alignment. Building on the success of RLHF techniques in language models like GPT-3, the approach achieved up to 47% improvement in image-text alignment, generating objects with specified colors, counts, and backgrounds more accurately than pretrained models. 
+A critical finding is that naive fine-tuning with human feedback can significantly reduce image quality, producing oversaturated or non-photorealistic outputs with reduced diversity. This quality-alignment trade-off represents a fundamental challenge for practical deployment of aligned T2I models. 
+2.8 Semantic Enhancement with Large Language Models 
+2.8.1 LLM4GEN: Leveraging LLM Representations 
+Liu et al. [17] proposed LLM4GEN, a plug-and-play component improving T2I generation from complex instructions. The Cross-Adapter Module (CAM) combines LLM text understanding with standard T2I text encoders, while entity-guided regularization loss ensures correct attribute-object binding. 
+The approach addresses the limited capacity of CLIP-based text encoders for intricate semantic details and achieves strong performance across benchmarks including FID scores. Unlike previous methods requiring separate LLMs or vast training data, LLM4GEN uses only 10 million data points for efficient training. The introduction of DensePrompts addresses the lack of comprehensive benchmarks for long, detailed descriptions. 
+2.9 Unified Multimodal Architectures 
+2.9.1 Chameleon: Mixed-Modal Foundation Models 
+The Chameleon Team [18] developed a family of early-fusion, token-based mixed models processing arbitrary sequences of text, images, and code. The fully token-based representation enables a unified transformer architecture where images and text are converted to tokens and processed together. 
+The approach demonstrates strong performance across tasks when trained on large interleaved datasets with stability enhancements. However, optimization challenges arise from different distributions of text and image tokens, causing training instability. Image tokenization (1024 tokens from an 8192-size codebook) creates scalability concerns with increased input lengths affecting training and inference speed. 
+Requirements
+
+Design
+The project is designed around two key elements:
+
+It will help to enhance the quality of training by leveraging more than just raw captions. It aggregates OCR text, Google vision features, context of web pages, search queries, and semantic similarity of image content and argument claims. This ensures the resulting data set is better suited for text-to-image generation for learning purposes.
+4.1 System Design Goals
+The design aims to achieve the following things:
+Semantic enrichment: Add more description to the image metadata using OCR, vision annotations and web pages.
+Argument-image alignment: Match textual and semantic similarity to choose images that match most with argument claims.
+Multiple signals rather than relying on one caption field: multimodal robustness.
+Training readiness: Prepare structured JSONL samples for model fine-tuning from the processed dataset.
+Scalability: Process big collections of images and pages – repeatable pipeline.
+3.2 High-Level Architecture
+
+3.2.1 High-level Data Pipeline Design
+
+Figure 1: Data Preprocessing Design
+
+The initial phase of the pipeline is dedicated to the systematic ingestion and alignment of multimodal data. As illustrated in the first high-level architecture diagram, the system consumes the CLEF dataset through a linear progression that begins with raw file parsing and concludes with a unified semantic manifest. This framework is designed to bridge the gap between unstructured visual assets and the structured logic of argumentative claims.
+The extraction process begins by isolating unique identifiers, topics, and claims from the core argument repository. To facilitate high-accuracy retrieval, these claims are projected into a dense vector space. The methodology leverages compressed transformer architectures [19] to generate efficient text representations, ensuring that the system can perform rapid lookups during the association phase. By utilizing advanced text embedding models [20], the pipeline measures the conceptual proximity between image-based metadata and argument vectors, which allows for a nuanced matching strategy that transcends simple keyword overlap.
+Complementary to text parsing, the design incorporates a visual feature extraction layer that interprets image content at a semantic level. Metadata such as optical character recognition (OCR) results, web context, and search queries are harvested to build a comprehensive "visual signature" for every image. The first architecture diagram highlights how these disparate signals—ranging from page-level XPath references to localized vision annotations—are funneled into a semantic matcher. Through this alignment, every image is paired with its most relevant logical claim, resulting in a dataset where visual evidence is anchored to specific rhetorical intent.
+High-level Training Architecture Design
+
+Figure 2: Training and Inference Design
+The core of the generative framework relies on a state-of-the-art diffusion architecture optimized for high-fidelity synthesis. As depicted in the second architecture diagram, the training environment focuses on fine-tuning a foundational model using the semantically aligned dataset prepared in the previous stage. The architecture adopts the principles of rectified flow transformers [21], which streamline the noise-to-image transition by following a straight-line trajectory in the latent space. This approach significantly enhances the efficiency of the sampling process while maintaining the complex structural integrity of the generated images.
+A crucial component of this design is the integration of "argument-focused" captions as the primary supervisory signal. During the optimization phase, the model is exposed to pairs consisting of processed images and these specialized captions, which explicitly link the visual composition to a specific argumentative premise. This training strategy ensures that the model learns to prioritize rhetorical relevance over generic descriptive accuracy. The second diagram illustrates this iterative process, where the latent diffusion model is refined through a feedback loop that adjusts internal weights to minimize the divergence between the generated visual output and the logical intent of the argument claim.
+By concentrating exclusively on argument-focused textual guidance, the architecture encourages the model to internalize the relationship between abstract claims and concrete visual symbolism. The design further incorporates parameter-efficient adaptation techniques to maintain the stability of the pre-trained knowledge base while specializing the output for the unique constraints of the project. Ultimately, this training design yields a system capable of producing contextually grounded imagery that effectively "pictures the point" of a given logical argument.
+Implementation
+5.1 Dataset
+5.1.1 Dataset Description
+The research framework is built upon the Image Retrieval for Arguments dataset, which was curated for the Touché 2025 shared task [28]. Within this corpus, 128 argumentative claims are explored across 27 distinct sociopolitical and cultural topics. The dataset comprises approximately 32,339 web-crawled images, providing a vast multimodal landscape for the model to navigate. Each entry is stored in a hierarchical directory structure that preserves the original web context, ensuring that the visual data remains anchored to its source.
+
+At the root level, the core of the dataset is defined by the arguments.xml file. This repository contains the ground-truth data, including unique identification codes, broader topics, and the specific claims being made. The visual assets are organized within a nested images/ directory, where each image ID is mapped to a folder containing metadata such as raw captions, OCR-extracted text, and perceptual hashes. Furthermore, the dataset includes comprehensive pages/ subdirectories. These store the original webpage snapshots, search rankings, and XPath references, which are critical for understanding the visual-rhetorical context of the image. This comprehensive structure, detailed on the Zenodo repository, allows the preprocessing pipeline to fuse local image features with global web evidence.
+5.2 Training Strategy
+The training of the generative model follows a phased evolutionary path, moving from baseline adaptation to sophisticated semantic optimization.
+5.2.1 Phase 1: Initial Model Adaptation
+
+Initial training focused on bridging the domain gap between generic text-to-image synthesis and the specific requirements of argumentative visualization. The foundational model was fine-tuned using parameter-efficient techniques, specifically Low-Rank Adaptation (LoRA) [22]. This approach allowed for the modification of the underlying transformer layers without the prohibitive computational cost of full-parameter fine-tuning. Memory constraints were further addressed through the use of 8-bit quantization for optimization routines [23], which maintained numerical stability while significantly reducing the hardware footprint. During this stage, the training pipeline [24] prioritized the alignment of images with the primary argumentative claims, establishing a functional mapping between logical premises and visual motifs.
+
+Figure 3: Stable Diffusion Model Setup
+
+Figure 4: Baseline output for "Fast food chains contribute to the global economy"
+5.2.2 Phase 2: Semantic Refinement and Optimization
+The second stage of implementation introduced rigorous optimizations to enhance the relevance and aesthetic quality of the synthesized outputs. Central to this phase was the integration of a multi-stage contrastive learning framework, which utilized high-capacity text embeddings [20] to refine the model's understanding of subtle rhetorical nuances. The training architecture was upgraded to incorporate rectified flow transformers [21], which linearize the mapping between Gaussian noise and the data distribution for more efficient sampling.
+
+Figure 5: Phase 2 Loss Curve
+Technical enhancements in this refined phase [27] included the adoption of a minimum signal-to-noise ratio (Min-SNR) weighting strategy [25]. By adjusting the loss contribution based on the noise level, the training process became more robust against high-frequency artifacts. Additionally, the text encoder itself was subjected to specialized adaptation, ensuring that the semantic representations provided to the generative backbone were closely aligned with the "argument-focused" captions. The training logic also explored sigmoid loss functions [26] to stabilize the language-image pre-training. These optimizations resulted in a model that does not merely describe an image but synthesizes visual content that serves as a rhetorical extension of a logical claim.
+
+Figure 6: Model Output Evolution from Phase I to Phase II
+5.3 Building the Application
+The final component of the project involves the development of a centralized platform to facilitate the testing and generation of argument-aligned imagery. This application is constructed using a modern full-stack architecture, featuring a reactive frontend for real-time user interaction and a scalable backend capable of handling model inference tasks. The primary objective of this interface is to provide a sandbox environment where users can input argumentative claims and observe the system’s ability to generate supportive visual evidence.
+
+While the current implementation serves as a testing ground for the Touché task, the architecture is designed with modularity in mind. This ensures that the platform can be adapted for future domain-specific use cases, most notably in the field of e-learning. In such a scenario, the system could automatically generate supporting visual aids for complex logical concepts, thereby enhancing the instructional value of digital educational content.
+Testing and Evaluation
+6.1 Functional and Security Testing
+To ensure the reliability of the ArguMint platform, a series of functional tests were conducted on the user authentication module. This module, powered by a React frontend and Supabase backend, is responsible for managing user sessions and protecting the "Golden Dataset" of generated images.
+
+6.1.1 User Account Redundancy Check
+Duplicate User Account Registration Error
+Technical Context: This test verifies the backend's ability to cross-reference new registration attempts against the existing Supabase auth schema. The screenshot displays a toast notification triggered when a user attempts to register with an email address already present in the database. 
+Critical Analysis: This validation is critical for maintaining data integrity. By enforcing unique identifiers for every account, the system prevents data collisions in the image gallery and ensures that generation history is accurately mapped to the correct user session.
+
+
+
+6.1.2 Authentication and Credential Verification
+Secure Login Authentication Failure
+Technical Context: This screenshot demonstrates the system's response to an unauthorized access attempt. The Flask-based API receives the login request and performs a secure check against hashed credentials stored in the backend. Upon detecting a mismatch, it returns an "Invalid credentials" error. 
+Critical Analysis: This test confirms the security of the application. By providing a generic error message rather than specifying whether the username or password was incorrect, the system follows industry-standard security protocols to mitigate brute-force and account-enumeration attacks.
+
+
+6.1.3 Client-Side Input Validation
+Frontend Email Format Validation
+Technical Context: This image captures a client-side validation check. Using React's form state management, the application identifies a malformed email address (missing the '@' symbol) before the data is even sent to the server.
+Critical Analysis: Implementing validation at the frontend level is an optimization strategy. It reduces unnecessary API traffic and latency, providing a smoother user experience (UX) by catching simple syntax errors at the source rather than waiting for a server-side rejection.
+
+
+
+6.1.4 Data Integrity during Registration
+Figure 10: Password Confirmation Discrepancy Validation
+Technical Context: This test focuses on the "Confirm Password" logic. The screenshot shows the error state triggered when the primary password field and the confirmation field do not match.
+Critical Analysis: This ensures that users do not accidentally lose access to their accounts due to a typo during the registration phase. It is a fundamental component of the project's non-functional requirement for a "clean and reliable user experience".
+
+
+6.2 Operational Interface and Asset Management Testing
+Beyond security, the system must handle the complex lifecycle of an AI-generated asset—from the initial empty state to the computationally expensive denoising process and subsequent persistent storage. 
+6.2.1 Lifecycle of Image Generation
+Initial State of the Generative Workspace with Empty prompt
+Technical Context: This screenshot illustrates the "Blank Slate" state of the React-based generation page. Before a prompt is entered, the preview window is blanked out to prevent user confusion and unnecessary backend calls. The Generate Image button is also blocked out.
+Critical Analysis: This initial state confirms that the system correctly initializes the frontend environment, ensuring that inference parameters such as Guidance Scale and Inference Steps are defaulted to their optimal research-backed values (e.g., 28 steps) before the user initiates a request.
+
+
+Asynchronous Inference Progress Tracking
+Technical Context: This image displays the real-time progress bar during a 512x512 resolution generation. It shows the system at 64% completion (Step 18 of 28). 
+Critical Analysis: This is a key functional requirement for high-latency AI applications. Because Stable Diffusion 3.5 inference on a 4090 GPU takes several seconds, providing the user with step-by-step visual feedback prevents "perceived latency". The backend, powered by Flask, pushes these step-updates to the frontend to maintain a "live" connection.
+
+
+High-Fidelity Result Rendering
+Technical Context: The screenshot shows the final rendered output for the prompt "Flying Cars in the year 2070."
+Critical Analysis: This test verifies the successful "round-trip" of data. The MMDiT transformer processes the prompt, and the resulting tensor is converted back to an RGB image via the VAE decoder before being served to the client-side UI.
+
+
+
+6.2.2 Stateful Persistence and Gallery Management
+Automated Gallery Syncing
+Technical Context: This view shows the "My Gallery" page immediately after a new generation. The "Flying Cars" image has been automatically indexed alongside previous results. 
+Critical Analysis: This confirms the successful integration of Supabase for real-time data handling. Every time an image is generated, its metadata (prompt, seed, and URL) is stored in a relational table, ensuring the user has an immediate record of their work.
+
+
+
+Cross-Session History Maintenance
+Technical Context: This screenshot shows the gallery populated with older images (e.g., "X-ray of an arm fracture") for a returning user.
+Critical Analysis: This test proves the persistent storage capabilities of the platform. By utilizing authenticated sessions, the system ensures that generated images are not volatile and remain accessible even after the user logs out and returns at a later date.
+
+6.2.3 Asset CRUD Operations (Download & Delete)
+Dynamic Asset Interaction Overlay
+Technical Context: This image shows the hover state on a gallery item, revealing "Download" and "Delete" icons.
+Critical Analysis: This provides the user with full CRUD (Create, Read, Update, Delete) control over their generative history. The download functionality allows for the retrieval of high-resolution JPEGs.
+
+
+
+
+Multi-Step Deletion Confirmation
+Technical Context: A browser-level confirmation dialog asking "Are you sure you want to delete this image?"
+Critical Analysis: This is a standard UX safety measure. In a system where generation costs time and computational resources, preventing accidental deletion is a non-functional requirement for "Reliability".
+
+
+
+Successful Asynchronous Asset Removal
+Technical Context: The final state after deletion, showing a "6 images" count and a "Success" toast notification.
+Critical Analysis: This confirms that the system correctly updates both the Supabase database record and the visual frontend state without requiring a full page refresh, demonstrating a modern, reactive single-page application (SPA) behavior.
+
+
+6.2.4 Real-time Information Retrieval
+As the volume of generated content grows, the ability to rapidly filter and locate specific visual arguments becomes a critical functional requirement for the ArguMint platform.
+Contextual Search and Filtering Logic
+Technical Context: This screenshot demonstrates the real-time search functionality within the "My Gallery" view. 
+Technical Context: As the user inputs the string "red ball to" into the search field, the React frontend dynamically filters the displayed components to match the prompt metadata associated with each image. 
+Critical Analysis: This test confirms the seamless integration between the frontend state and the Supabase database management system.
+
+
+Conclusion
+
+
+ArguMint: Picture the Point successfully illustrates the potential of the fusion of modern diffusion-based generative models with semantic understanding techniques to tackle the complex challenge of illustration of arguments. The project examined the possibility of conveying abstract arguments in a visual way that can help users grasp the main point and emotional content of an argument. The research is part of the Touché 2025 shared task, an initiative that sets the groundwork for the convergence of computational argumentation, multimodal AI, and visual, human-centered communication. 
+
+The system's implementation process covered the entire lifecycle of an AI-based application, from preprocessing large-scale datasets to semantic alignment, fine-tuning the model, deployment, and evaluation. The project was carried out using the Stable Diffusion 3.5 Medium and Low-Rank Adaptation (LoRA) models, which provided a balance between performance and computational efficiency. The project used the Stable Diffusion 3.5 Medium and Low-Rank Adaptation (LoRA) models, offering an efficient balance between model performance and computational resources. The 8-bit quantization, gradient checkpointing, mixed-precision training and Min-SNR [25]  weighting techniques allowed the model to perform well under hardware constraints without compromising visual quality and semantic consistency. 
+
+The key step of this research was creating a high-quality semantic preprocessing pipeline to match argumentative claims with relevant visual data. The project resulted in a curated “Golden Dataset”, using GTE-Large embeddings, OCR extraction, Web-context analysis and cosine similarity matching, which greatly enhanced the relevance of outputs. The model's ability to produce images as visual extensions of rhetorical claims was further improved by the transition from Phase I baseline training of the model to Phase II semantic refinement to enhance contextual understanding of the model. 
+
+
+
+
+
+
+Beyond the generative model, the project also resulted in a usable full-stack application that facilitates user authentication, image generation, the management of galleries, real-time tracking of the generation of assets, and persistent inference tracking. The platform was found to be reliable through functional and security testing, and it is designed to be modular to allow for easy scalability in the future for other improvements and domain-specific applications. 
+
+In general, ArguMint lays a solid groundwork for future exploration of argument-aware image generation and multimodal reasoning systems. While there are still avenues for improvement, including the introduction of more complex facial structures, the use of abstract symbols, and final CLEF human evaluation scores, the project demonstrates the potential for creating semantically similar visual arguments with current diffusion architectures. Possible future work includes scaling the dataset to more dimensions, incorporating reinforcement learning with human feedback, optimizing mechanism to make the system more controllable, and scaling the system to new domains, such as education, journalism, and persuasive communication, where visual argumentation can greatly help the user's understanding and engagement. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Future Works
+
+Argument-Aware Image Editing and Iterative Refinement 
+One of the primary improvements of ArguMint in the future will be the ability to edit images rather than just creating a single image. This would enable users to further manipulate the output of the visuals to the degree they would like, such as adding or taking away emotional intensity, being more specific about what components they want to highlight, or make things simpler in composition, but keep the original meaning and argument. Combining diffusion-based image editing with the already established LoRA adapted Stable Diffusion pipeline could enable such iterative refinement, providing more accurate, flexible, and user-driven visuals to represent complex arguments.
+
+Multi-Image Argument Narratives for Visual Storytelling
+Another promising avenue of research is the possibility of scaling up the system from outputs of a single image to outputs of structured multi-image narratives. In this arrangement, one argumentative claim would be broken down into a series of argumentative visuals that each supported particular parts of the claim: cause, effect, evidence, and conclusion. This would now become visual storytelling and make it easier to convey complex or multi-layer arguments. In order to achieve a coherent sequence and reinforce the rhetorical effectiveness, consistency of the sematics and style inside the generated sequence would be paramount.
+
+Human-in-the-Loop Refinement and Feedback-Driven Alignment
+Further studies could also include the use of human feedback in the generation pipeline to enhance alignment and controllability. The inclusion of a human-in-the-loop mechanism would allow users or evaluators to give feedback on the quality of the images generated in terms of how well they support the intended argument, which could then be used to fine-tune or guide the model. The reinforcement learning from human feedback (RLHF) or preference-based optimization methods would assist the system to acquire more accurate visual understanding of abstract statements. This would considerably improve the reliability in the real world applications like education, journalism and persuasive communications.
+
+
+References
+
+[1] H. Zhang et al., "StackGAN: Text to Photo-Realistic Image Synthesis with Stacked Generative Adversarial Networks," arXiv preprint arXiv:1710.10916, 2017.
+[2] T. Xu et al., "AttnGAN: Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks," arXiv preprint arXiv:1910.09399, 2019.
+[3] A. Ramesh, M. Pavlov et al., "Zero-Shot Text-to-Image Generation," arXiv preprint arXiv:2102.12092, Feb. 2021.
+[4] R. Rombach, A. Blattmann et al., "High-Resolution Image Synthesis with Latent Diffusion Models," arXiv preprint arXiv:2112.10752, Apr. 2022.
+[5] J. Chen, C. Ge et al., "PixArt-Σ: Weak-to-Strong Training of Diffusion Transformer for 4K Text-to-Image Generation," arXiv preprint arXiv:2403.04692, Mar. 2024.
+[6] I. Goodfellow et al., "Generative Adversarial Nets," Advances in Neural Information Processing Systems, vol. 27, Jun. 2014.
+[7] Q. Cai, J. Chen, Y. Chen, and Y. Li, "HiDream-I1: A High-Efficient Image Generative Foundation Model with Sparse Diffusion Transformer," arXiv preprint, May 2025.
+[8] A. Ramesh et al., "Hierarchical Text-Conditional Image Generation with CLIP Latents," arXiv preprint arXiv:2204.06125, Apr. 2022.
+[9] A. Süleyman and G. Biricik, "Grounding Text-to-Image Diffusion Models for Controlled High-Quality Image Generation," arXiv preprint, Jan. 2025.
+[10] K. Lee and H. Liu, "Aligning Text-to-Image Models using Human Feedback," arXiv preprint arXiv:2302.12192, Feb. 2023.
+[11] J. Yu, Y. Xu, J. Y. Koh et al., "Scaling Autoregressive Models for Content-Rich Text-to-Image Generation," arXiv preprint arXiv:2206.10789, Jun. 2022.
+[12] M. Ding, Z. Yang, W. Hong et al., "CogView: Mastering Text-to-Image Generation via Transformers," arXiv preprint arXiv:2105.13290, Nov. 2021.
+[13] A. Nichol, P. Dhariwal, A. Ramesh et al., "GLIDE: Towards Photorealistic Image Generation and Editing with Text-Guided Diffusion Models," arXiv preprint arXiv:2112.10741, Dec. 2021.
+[14] L. Yang, Y. Tian, B. Li et al., "MMaDA: Multimodal Large Diffusion Language Models," arXiv preprint,
+May 2025.
+[15] J. Cho, A. Zala, and M. Bansal, "Visual Programming for Step-by-Step Text-to-Image Generation and Evaluation," arXiv preprint arXiv:2305.13482, May 2023.
+[16] GenAI, Meta, "Imagine Yourself: Tuning-Free Personalized Image Generation," arXiv preprint, Sep. 2025.
+[17] M. Liu, Y. Ma, and Z. Yang, "LLM4GEN: Leveraging Semantic Representation of LLMs for Text-to-Image Generation," arXiv preprint arXiv:2408.13131, Aug. 2024.
+[18] Chameleon Team, "Chameleon: Mixed-Modal Early-Fusion Foundation Models," arXiv preprint, Mar. 2025.
+[19] W. Wang et al., "MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-trained Transformers," arXiv preprint arXiv:2002.10957, 2020.
+[20] Z. Li et al., "Towards General Text Embeddings with Multi-stage Contrastive Learning," arXiv preprint arXiv:2308.03281, 2023.
+[21] P. Esser et al., "Scaling Rectified Flow Transformers for High-Resolution Image Synthesis," presented at the 41st International Conference on Machine Learning, 2024.
+[22] E. J. Hu et al., "LoRA: Low-Rank Adaptation of Large Language Models," arXiv preprint arXiv:2106.09885, 2021.
+[23] T. Dettmers et al., "8-bit Optimizers via Block-wise Quantization," presented at the 10th International Conference on Learning Representations, 2022.
+[24] "Baseline Training Pipeline for Argument Visualization (train_sd35_clef.py)," internal project documentation, 2025.
+[25] T. Hang et al., "Efficient Diffusion Training via Min-SNR Weighting Strategy," arXiv preprint arXiv:2303.09556, 2023.
+[26] X. Zhai et al., "Sigmoid Loss for Language Image Pre-Training," arXiv preprint arXiv:2303.15343, 2023.
+[27] "Enhanced Training and Optimization Pipeline (improved_train_sd35_clef.py)," internal project documentation, 2026.
+[28] Touché Dataset, "Image Retrieval/Generation for Arguments 2025 Dataset," Zenodo, 2024. DOI: 10.5281/zenodo.14258397.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
